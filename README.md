@@ -24,6 +24,8 @@ This is a practice and reference folder for understanding how asynchronous progr
 - gather.py: Running multiple coroutines with gather and using TaskGroup for safer handling.
 - Lock.py: Protecting shared state with asyncio.Lock.
 - Practice.py: Practical patterns including gather, wait_for fallback, and async generator streaming.
+- queue.py: Producer/consumer example using `asyncio.Queue` to handle bursts and buffering.
+- semaphore.py: Concurrency-limiting example using `asyncio.Semaphore` to throttle simultaneous calls.
 
 ## How To Run
 
@@ -35,6 +37,8 @@ python tasks.py
 python gather.py
 python Lock.py
 python Practice.py
+python queue.py
+python semaphore.py
 
 ## Recommended Learning Order
 
@@ -44,7 +48,9 @@ python Practice.py
 4. gather.py
 5. Lock.py
 6. Practice.py
-7. Concepts.md
+7. queue.py
+8. semaphore.py
+9. Concepts.md
 
 ## Audience
 
@@ -54,3 +60,4 @@ This folder is useful for beginners and intermediate Python learners who want ha
 
 - These examples are intentionally small and educational.
 - Focus is on clarity and asyncio concepts, not production architecture.
+- New examples `queue.py` and `semaphore.py` demonstrate queue buffering and concurrency throttling patterns.
