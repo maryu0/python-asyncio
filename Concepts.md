@@ -145,6 +145,30 @@ Main operations:
 
 This becomes very relevant in systems involving request queues, worker pipelines, or backpressure management [1].
 
+Notes and patterns:
+
+- Handles bursts: producers can add many items quickly while a limited number of consumers process them; the rest wait in the queue.
+- Typical pattern: start one or more consumer "worker" coroutines that loop on `await queue.get()`, process the item, then call `queue.task_done()`; to wait for all items to be processed use `await queue.join()`.
+- Stopping consumers: use sentinel values or cancellation to break consumer loops cleanly (avoid leaving tasks hanging).
+
+See the example producer/consumer in [AyncIO/queue.py](AyncIO/queue.py).
+
+## Semaphore — limiting concurrency
+
+An `asyncio.Semaphore` controls how many coroutines may enter a critical section at the same time. It is useful for rate-limiting concurrent access to a scarce resource (API endpoints, DB connections, etc.).
+
+Pattern:
+
+- Create a semaphore with the maximum concurrency, e.g. `sem = asyncio.Semaphore(3)`.
+- Use `async with sem:` around the section that must be limited. Coroutines trying to enter when the semaphore is at capacity will wait until a slot frees up.
+
+Advantages:
+
+- Simpler than a dedicated worker pool when you want many producers but a cap on simultaneous resource usage.
+- Works well combined with `asyncio.gather()` or many `asyncio.create_task()` calls to throttle concurrency.
+
+See the concurrency-limiting example in [AyncIO/semaphore.py](AyncIO/semaphore.py).
+
 ## Why generators matter before async generators
 
 A **generator** is a function that yields values one at a time using `yield`, instead of returning everything at once [6][7]. It remembers its state between yields, so it can pause and resume later [8][9].
